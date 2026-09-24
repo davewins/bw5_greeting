@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>Processes/Greeting.process</pd:name>
+    <pd:startName>HTTP Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="HTTP Receiver">
+        <pd:type>com.tibco.plugin.http.HTTPEventSource</pd:type>
+        <pd:resourceType>httppalette.httpEventSource</pd:resourceType>
+        <pd:x>125</pd:x>
+        <pd:y>126</pd:y>
+        <config>
+            <outputMode>String</outputMode>
+            <defaultEncoding>ISO8859_1</defaultEncoding>
+            <inputOutputVersion>5.3.0</inputOutputVersion>
+            <newMimeSupport>true</newMimeSupport>
+            <sharedChannel>/Shared Connections/HTTP Connection.sharedhttp</sharedChannel>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Connection" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endActivityTags/>
+    <pd:endX>716</pd:endX>
+    <pd:endY>124</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1700076669421</pd:targetNamespace>
+    <pd:activity name="Send HTTP Response">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:x>506</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>HTTP Receiver</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <asciiContent>
+                    <xsl:value-of select="concat(&#xA; &quot;&lt;!DOCTYPE html>&lt;html>&lt;head>&lt;meta charset='UTF-8'>&lt;link rel='icon' href='data:,'>&lt;title>BW Status&lt;/title>&quot;,&#xA; &quot;&lt;style>&quot;,&#xA; &quot;body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9;display:flex;justify-content:center;padding-top:60px;margin:0}&quot;,&#xA; &quot;.card{background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.12);padding:28px 36px;min-width:360px}&quot;,&#xA; &quot;h1{margin:0 0 18px;font-size:22px;color:#1a3d6d}&quot;,&#xA; &quot;table{border-collapse:collapse;width:100%}&quot;,&#xA; &quot;td{padding:8px 4px;border-bottom:1px solid #eee;font-size:15px}&quot;,&#xA; &quot;td.k{color:#666;width:40%}&quot;,&#xA; &quot;td.v{font-weight:600;color:#222}&quot;,&#xA; &quot;&lt;/style>&lt;/head>&lt;body>&lt;div class='card'>&quot;,&#xA; &quot;&lt;h1>Hello &quot;, translate($HTTP-Receiver/ProcessStarterOutput/QueryString, &quot;&lt;>&amp;&quot;, &quot;&quot;), &quot;&lt;/h1>&quot;,&#xA; &quot;&lt;table>&quot;,&#xA; &quot;&lt;tr>&lt;td class='k'>Host&lt;/td>&lt;td class='v'>&quot;, $Get-BW-Environment/javaCodeActivityOutput/hostName, &quot;&lt;/td>&lt;/tr>&quot;,&#xA; &quot;&lt;tr>&lt;td class='k'>BW Version&lt;/td>&lt;td class='v'>&quot;, $Get-BW-Environment/javaCodeActivityOutput/bwVersion, &quot;&lt;/td>&lt;/tr>&quot;,&#xA; &quot;&lt;tr>&lt;td class='k'>App Version&lt;/td>&lt;td class='v'>&quot;, $Get-BW-Environment/javaCodeActivityOutput/appVersion, &quot;&lt;/td>&lt;/tr>&quot;,&#xA; &quot;&lt;/table>&lt;/div>&lt;/body>&lt;/html>&quot;&#xA;)"/>
+                </asciiContent>
+                <Headers>
+                    <Content-Type>
+                        <xsl:value-of select="&quot;text/html; charset=UTF-8&quot;"/>
+                    </Content-Type>
+                </Headers>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>247</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Received Message: &quot;,$HTTP-Receiver/ProcessStarterOutput/QueryString)"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get BW Environment">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>364</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <fullsource>package Processes.Greeting;
+import java.util.*;
+import java.io.*;
+public class GreetingGetBWEnvironment{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String hostName = "";
+	protected String bwVersion = "";
+	protected String appVersion = "";
+	public String gethostName() {
+		return hostName;
+	}
+	public void sethostName(String val) {
+		hostName = val;
+	}
+	public String getbwVersion() {
+		return bwVersion;
+	}
+	public void setbwVersion(String val) {
+		bwVersion = val;
+	}
+	public String getappVersion() {
+		return appVersion;
+	}
+	public void setappVersion(String val) {
+		appVersion = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public GreetingGetBWEnvironment() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	Out : String hostName
+	Out : String bwVersion
+	Out : String appVersion
+* Available Variables: DO NOT MODIFY *****/
+// 1. Get Hostname
+java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
+String hostName = localMachine.getHostName();
+
+// 2. Get TIBCO BW Engine Version
+// 2a. Explicit override first
+String bwVersion = System.getProperty("tibco.env.BW_VERSION");
+if (bwVersion == null) bwVersion = System.getenv("BW_VERSION");
+
+// 2a-bis. TIBCO Platform image tag, e.g. "BW-5.16.1-HF5-TRA-5.13.0-HF5"
+if (bwVersion == null) {
+    String tag = System.getenv("TIBCO_INTERNAL_BW5_BUILDTYPE_TAG");
+    if (tag != null) {
+        java.util.regex.Matcher tm = java.util.regex.Pattern.compile(
+            "BW-(\\d+\\.\\d+\\.\\d+)(?:-HF(\\d+))?(?:-TRA-(\\d+\\.\\d+\\.\\d+)(?:-HF(\\d+))?)?",
+            java.util.regex.Pattern.CASE_INSENSITIVE).matcher(tag);
+        if (tm.find()) {
+            bwVersion = tm.group(1) + (tm.group(2) != null ? " HF" + Integer.parseInt(tm.group(2)) : "");
+            if (tm.group(3) != null) {
+                bwVersion += " (TRA " + tm.group(3)
+                          + (tm.group(4) != null ? " HF" + Integer.parseInt(tm.group(4)) : "") + ")";
+            }
+        } else {
+            bwVersion = tag;   // unexpected format - show it raw rather than guess
+        }
+    }
+}
+
+// 2b. Derive from the loaded engine.jar path + TIBCO_HOME/_installInfo (e.g. "5.16.1 HF7")
+if (bwVersion == null) {
+    String cpSep = System.getProperty("path.separator", ";");
+    String cp    = System.getProperty("java.class.path", "");
+
+    // Major.minor from the engine.jar actually on the classpath (e.g. 5.16)
+    String majorMinor = null;
+    java.util.regex.Pattern enginePat = java.util.regex.Pattern.compile(
+        "/bw/(5\\.\\d+)/lib/engine\\.jar$", java.util.regex.Pattern.CASE_INSENSITIVE);
+    String[] cpEntries = cp.split(java.util.regex.Pattern.quote(cpSep));
+    for (int i = 0; i &lt; cpEntries.length; i++) {
+        java.util.regex.Matcher m = enginePat.matcher(cpEntries[i].replace('\\', '/'));
+        if (m.find()) { majorMinor = m.group(1); break; }
+    }
+
+    if (majorMinor != null) {
+        String fullVersion = majorMinor;
+        int hotfix = 0;
+
+        String tibHome = System.getProperty("TIBCO_HOME");
+        if (tibHome == null) tibHome = System.getenv("TIB_HOME");
+
+        if (tibHome != null) {
+            java.util.regex.Pattern verPat = java.util.regex.Pattern.compile(
+                "(" + java.util.regex.Pattern.quote(majorMinor) + "\\.(\\d+))");
+            java.util.regex.Pattern hfPat = java.util.regex.Pattern.compile(
+                "(?:HF|hotfix)[\\s_-]*0*(\\d{1,3})\\b", java.util.regex.Pattern.CASE_INSENSITIVE);
+
+            java.io.File[] infoFiles = new java.io.File(tibHome, "_installInfo").listFiles();
+            int bestPatch = -1;
+            if (infoFiles != null) {
+                for (int i = 0; i &lt; infoFiles.length; i++) {
+                    java.io.File f = infoFiles[i];
+                    if (!f.getName().toLowerCase().contains("bw")) continue;
+
+                    String text = f.getName();
+                    try {
+                        if (f.isFile() &amp;&amp; f.length() &lt; 1000000)
+                            text += "\n" + new String(java.nio.file.Files.readAllBytes(f.toPath()), "UTF-8");
+                    } catch (Exception ex) {
+                        // unreadable file - just use its name
+                    }
+
+                    // Only trust files that mention this major.minor
+                    java.util.regex.Matcher vm = verPat.matcher(text);
+                    boolean relevant = false;
+                    while (vm.find()) {
+                        relevant = true;
+                        int p = Integer.parseInt(vm.group(2));
+                        if (p &gt; bestPatch) { bestPatch = p; fullVersion = vm.group(1); }
+                    }
+                    if (!relevant) continue;
+
+                    java.util.regex.Matcher hm = hfPat.matcher(text);
+                    while (hm.find()) {
+                        int n = Integer.parseInt(hm.group(1));
+                        if (n &gt; hotfix) hotfix = n;
+                    }
+                }
+            }
+        }
+        bwVersion = fullVersion + (hotfix &gt; 0 ? " HF" + hotfix : "");
+    }
+}
+
+// 2c. Fall back to the engine package metadata
+if (bwVersion == null) {
+    Package bWPackage = com.tibco.pe.core.Engine.class.getPackage();
+    if (bWPackage != null) {
+        bwVersion = bWPackage.getImplementationVersion();
+    }
+}
+if (bwVersion == null) {
+    bwVersion = "Unknown BW Version";
+}
+
+// 3. Get Application / EAR Version
+String appVersion = System.getProperty("tibco.env.APP_VERSION");
+if (appVersion == null) appVersion = System.getenv("APP_VERSION");
+if (appVersion == null) appVersion = System.getenv("BW_PROJECT_VERSION");
+if (appVersion == null) appVersion = "Development / Local";
+
+// Map to your Java Activity Output Parameters
+sethostName(hostName);
+setbwVersion(bwVersion);
+setappVersion(appVersion);}
+}
+</fullsource>
+            <fileName>GreetingGetBWEnvironment</fileName>
+            <packageName>Processes.Greeting</packageName>
+            <outputData>
+                <row>
+                    <fieldName>hostName</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>bwVersion</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>appVersion</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>GreetingGetBWEnvironment</name>
+                    <byteCode>yv66vgAAAD0A7QkAAgADBwAEDAAFAAYBACtQcm9jZXNzZXMvR3JlZXRpbmcvR3JlZXRpbmdHZXRCV0Vudmlyb25tZW50AQAIaG9zdE5hbWUBABJMamF2YS9sYW5nL1N0cmluZzsJAAIACAwACQAGAQAJYndWZXJzaW9uCQACAAsMAAwABgEACmFwcFZlcnNpb24KAA4ADwcAEAwAEQASAQAQamF2YS9sYW5nL09iamVjdAEABjxpbml0PgEAAygpVggAFAEAAAoAFgAXBwAYDAAZABoBABRqYXZhL25ldC9JbmV0QWRkcmVzcwEADGdldExvY2FsSG9zdAEAGCgpTGphdmEvbmV0L0luZXRBZGRyZXNzOwoAFgAcDAAdAB4BAAtnZXRIb3N0TmFtZQEAFCgpTGphdmEvbGFuZy9TdHJpbmc7CAAgAQAUdGliY28uZW52LkJXX1ZFUlNJT04KACIAIwcAJAwAJQAmAQAQamF2YS9sYW5nL1N5c3RlbQEAC2dldFByb3BlcnR5AQAmKExqYXZhL2xhbmcvU3RyaW5nOylMamF2YS9sYW5nL1N0cmluZzsIACgBAApCV19WRVJTSU9OCgAiACoMACsAJgEABmdldGVudggALQEAIFRJQkNPX0lOVEVSTkFMX0JXNV9CVUlMRFRZUEVfVEFHCAAvAQBFQlctKFxkK1wuXGQrXC5cZCspKD86LUhGKFxkKykpPyg/Oi1UUkEtKFxkK1wuXGQrXC5cZCspKD86LUhGKFxkKykpPyk/BwAxAQAXamF2YS91dGlsL3JlZ2V4L1BhdHRlcm4KADAAMwwANAA1AQAHY29tcGlsZQEALihMamF2YS9sYW5nL1N0cmluZztJKUxqYXZhL3V0aWwvcmVnZXgvUGF0dGVybjsKADAANwwAOAA5AQAHbWF0Y2hlcgEAMyhMamF2YS9sYW5nL0NoYXJTZXF1ZW5jZTspTGphdmEvdXRpbC9yZWdleC9NYXRjaGVyOwoAOwA8BwA9DAA+AD8BABdqYXZhL3V0aWwvcmVnZXgvTWF0Y2hlcgEABGZpbmQBAAMoKVoKADsAQQwAQgBDAQAFZ3JvdXABABUoSSlMamF2YS9sYW5nL1N0cmluZzsKAEUARgcARwwASABJAQARamF2YS9sYW5nL0ludGVnZXIBAAhwYXJzZUludAEAFShMamF2YS9sYW5nL1N0cmluZzspSRIAAABLDABMAEMBABdtYWtlQ29uY2F0V2l0aENvbnN0YW50cxIAAQBODABMAE8BADgoTGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7KUxqYXZhL2xhbmcvU3RyaW5nOxIAAgBRDABMAFIBAEooTGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7KUxqYXZhL2xhbmcvU3RyaW5nOwgAVAEADnBhdGguc2VwYXJhdG9yCABWAQABOwoAIgBYDAAlAE8IAFoBAA9qYXZhLmNsYXNzLnBhdGgIAFwBAB0vYncvKDVcLlxkKykvbGliL2VuZ2luZVwuamFyJAoAMABeDABfACYBAAVxdW90ZQoAYQBiBwBjDABkAGUBABBqYXZhL2xhbmcvU3RyaW5nAQAFc3BsaXQBACcoTGphdmEvbGFuZy9TdHJpbmc7KVtMamF2YS9sYW5nL1N0cmluZzsKAGEAZwwAaABpAQAHcmVwbGFjZQEAFihDQylMamF2YS9sYW5nL1N0cmluZzsIAGsBAApUSUJDT19IT01FCABtAQAIVElCX0hPTUUSAAMAbwwATAAmCgAwAHEMADQAcgEALShMamF2YS9sYW5nL1N0cmluZzspTGphdmEvdXRpbC9yZWdleC9QYXR0ZXJuOwgAdAEAISg/OkhGfGhvdGZpeClbXHNfLV0qMCooXGR7MSwzfSlcYgcAdgEADGphdmEvaW8vRmlsZQgAeAEADF9pbnN0YWxsSW5mbwoAdQB6DAARAHsBACcoTGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9TdHJpbmc7KVYKAHUAfQwAfgB/AQAJbGlzdEZpbGVzAQARKClbTGphdmEvaW8vRmlsZTsKAHUAgQwAggAeAQAHZ2V0TmFtZQoAYQCEDACFAB4BAAt0b0xvd2VyQ2FzZQgAhwEAAmJ3CgBhAIkMAIoAiwEACGNvbnRhaW5zAQAbKExqYXZhL2xhbmcvQ2hhclNlcXVlbmNlOylaCgB1AI0MAI4APwEABmlzRmlsZQoAdQCQDACRAJIBAAZsZW5ndGgBAAMoKUoFAAAAAAAPQkAKAHUAlgwAlwCYAQAGdG9QYXRoAQAWKClMamF2YS9uaW8vZmlsZS9QYXRoOwoAmgCbBwCcDACdAJ4BABNqYXZhL25pby9maWxlL0ZpbGVzAQAMcmVhZEFsbEJ5dGVzAQAYKExqYXZhL25pby9maWxlL1BhdGg7KVtCCACgAQAFVVRGLTgKAGEAogwAEQCjAQAXKFtCTGphdmEvbGFuZy9TdHJpbmc7KVYSAAQATgcApgEAE2phdmEvbGFuZy9FeGNlcHRpb24HAKgBABhjb20vdGliY28vcGUvY29yZS9FbmdpbmUKAKoAqwcArAwArQCuAQAPamF2YS9sYW5nL0NsYXNzAQAKZ2V0UGFja2FnZQEAFSgpTGphdmEvbGFuZy9QYWNrYWdlOwoAsACxBwCyDACzAB4BABFqYXZhL2xhbmcvUGFja2FnZQEAGGdldEltcGxlbWVudGF0aW9uVmVyc2lvbggAtQEAElVua25vd24gQlcgVmVyc2lvbggAtwEAFXRpYmNvLmVudi5BUFBfVkVSU0lPTggAuQEAC0FQUF9WRVJTSU9OCAC7AQASQldfUFJPSkVDVF9WRVJTSU9OCAC9AQATRGV2ZWxvcG1lbnQgLyBMb2NhbAoAAgC/DADAAMEBAAtzZXRob3N0TmFtZQEAFShMamF2YS9sYW5nL1N0cmluZzspVgoAAgDDDADEAMEBAAxzZXRid1ZlcnNpb24KAAIAxgwAxwDBAQANc2V0YXBwVmVyc2lvbgEAC2dldGhvc3ROYW1lAQAEQ29kZQEAD0xpbmVOdW1iZXJUYWJsZQEADGdldGJ3VmVyc2lvbgEADWdldGFwcFZlcnNpb24BAAZpbnZva2UBAA1TdGFja01hcFRhYmxlBwDQAQATW0xqYXZhL2xhbmcvU3RyaW5nOwcA0gEAD1tMamF2YS9pby9GaWxlOwEACkV4Y2VwdGlvbnMBAApTb3VyY2VGaWxlAQAdR3JlZXRpbmdHZXRCV0Vudmlyb25tZW50LmphdmEBABBCb290c3RyYXBNZXRob2RzDwYA2AoA2QDaBwDbDABMANwBACRqYXZhL2xhbmcvaW52b2tlL1N0cmluZ0NvbmNhdEZhY3RvcnkBAJgoTGphdmEvbGFuZy9pbnZva2UvTWV0aG9kSGFuZGxlcyRMb29rdXA7TGphdmEvbGFuZy9TdHJpbmc7TGphdmEvbGFuZy9pbnZva2UvTWV0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</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>HTTP Receiver</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Get BW Environment</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send HTTP Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get BW Environment</pd:from>
+        <pd:to>Send HTTP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
