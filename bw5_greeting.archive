@@ -10,15 +10,15 @@
             <authorProperty>dave</authorProperty>
             <processProperty>/Processes/Greeting.process</processProperty>
         </processArchive>
-        <versionProperty>5</versionProperty>
+        <versionProperty>6</versionProperty>
         <authorProperty>dave</authorProperty>
         <addServiceSettableGvars>true</addServiceSettableGvars>
-        <name>greeting</name>
+        <name>bw5_greeting</name>
         <designer>
             <lockedProperties/>
             <fixedChildren/>
             <resourceDescriptions/>
         </designer>
-        <fileLocationProperty>greeting/EAR/greeting.ear</fileLocationProperty>
+        <fileLocationProperty>bw5_greeting/EAR/bw5_greeting.ear</fileLocationProperty>
     </enterpriseArchive>
 </Repository:repository>

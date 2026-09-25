@@ -1,4 +1,4 @@
-# greeting
+# bw5_greeting
 
 A small **TIBCO BusinessWorks 5 (BW5)** project that exposes an HTTP endpoint. When
 called, it returns a styled HTML "status card" that greets the caller by name and
@@ -64,8 +64,8 @@ system properties such as `BW_VERSION`, `TIBCO_HOME`, `APP_VERSION`, and
 | `Shared Connections/HTTP Connection.sharedhttp` | Shared HTTP listener configuration.           |
 | `defaultVars/defaultVars.substvar`         | Global (deployment-settable) variables.            |
 | `AESchemas/`                               | Referenced AE / XSD schema definitions.            |
-| `EAR/greeting.ear`                         | Pre-built enterprise archive for deployment.       |
-| `greeting.archive`                         | EAR/archive build descriptor.                      |
+| `EAR/bw5_greeting.ear`                     | Pre-built enterprise archive for deployment.       |
+| `bw5_greeting.archive`                     | EAR/archive build descriptor.                      |
 | `vcrepo.dat`                               | BW project metadata (design-time version 5.12.3).  |
 
 ## Building & running
@@ -75,7 +75,7 @@ toolset rather than a generic build tool:
 
 1. Open the project folder in **TIBCO Designer**.
 2. Run the `Greeting` process in the **Designer Tester**, or deploy the prebuilt
-   `EAR/greeting.ear` to a BW engine via TIBCO Administrator / `AppManage`.
+   `EAR/bw5_greeting.ear` to a BW engine via TIBCO Administrator / `AppManage`.
 3. Set `httpPort` at deployment time if the default `8282` is not suitable.
 4. Browse to `http://<host>:<httpPort>/?<name>` to see the greeting.
 
